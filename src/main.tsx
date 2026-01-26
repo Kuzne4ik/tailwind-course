@@ -3,11 +3,26 @@ import { createRoot } from 'react-dom/client'
 import './index.scss'
 import App from './App.tsx'
 import { AuthProvider } from './AuthProvider.tsx'
+import { createBrowserRouter } from "react-router";
+import { RouterProvider } from "react-router/dom";
 
-createRoot(document.getElementById('root')!).render(
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />
+  },
+  {
+    path: "/aboutus",
+    element: <div>About us</div>
+  }
+]);
+const root = document.getElementById('root')
+
+createRoot(root!).render(
   <StrictMode>
     <AuthProvider>
-      <App />
+      <RouterProvider router={router} />
     </AuthProvider>
   </StrictMode>,
 )

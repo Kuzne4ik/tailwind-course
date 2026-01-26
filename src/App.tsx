@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import './App.scss'
 import Details from './Details'
 import { AuthContext } from './AuthContext'
@@ -8,6 +8,13 @@ export interface IDetails {
   title: string,
   description: string,
   buttontext: string
+}
+
+export interface Todo {
+  id: number,
+  title: string,
+  completed: boolean,
+  userId: number
 }
 
 
@@ -24,8 +31,20 @@ function App() {
     buttontext: 'Click'
   })
 
+  const [todos, setTodos] = useState<Todo[]>([])
+
+  useEffect(() => {
+      const fetchData = async() => {
+        const response = await fetch("https://jsonplaceholder.typicode.com/todos");
+        const data = await response.json();
+        setTodos(data);
+      }
+      fetchData();
+  }, []);
+
   return (
     <>
+    
       <Header></Header>
 
       <div style={{
@@ -34,6 +53,10 @@ function App() {
 
         {/* Компонент из файла tsx! */}
         <Details details={details} setDetails={setDetails} />
+        <label>ToDo`s:</label>
+        <ul>
+          {todos?.map(todo => <li key={todo.id}>{todo.title}</li>)}
+        </ul>
 
         
         <br></br>
