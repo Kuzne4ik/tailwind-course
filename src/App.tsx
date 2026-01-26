@@ -3,6 +3,7 @@ import './App.scss'
 import Details from './Details'
 import { AuthContext } from './AuthContext'
 import Header from './Header'
+import { Link } from 'react-router-dom'
 
 export interface IDetails {
   title: string,
@@ -42,6 +43,9 @@ function App() {
       fetchData();
   }, []);
 
+  //const navigate = useNavigate();
+
+  
   return (
     <>
     
@@ -50,6 +54,8 @@ function App() {
       <div style={{
         padding: 10
       }}>
+
+        <Link to='/aboutus'>About US</Link>
 
         {/* Компонент из файла tsx! */}
         <Details details={details} setDetails={setDetails} />
@@ -74,6 +80,8 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
+
+      
     </>
   )
 }
