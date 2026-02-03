@@ -11,7 +11,7 @@ export interface IDetails {
   buttontext: string
 }
 
-export interface Todo {
+export interface ITodo {
   id: number,
   title: string,
   completed: boolean,
@@ -32,7 +32,7 @@ function App() {
     buttontext: 'Click'
   })
 
-  const [todos, setTodos] = useState<Todo[]>([])
+  const [todos, setTodos] = useState<ITodo[]>([])
 
   useEffect(() => {
       const fetchData = async() => {
