@@ -5,6 +5,7 @@ function EmailEditor() {
         <>
             <h1>E-mail editor</h1>
             <div className={styles.card}></div>
+            {/**<div className={styles.card}>components/EmailEditor.tsx</div>*/}
         </>
     )
 }
