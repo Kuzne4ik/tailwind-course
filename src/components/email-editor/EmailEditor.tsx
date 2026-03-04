@@ -148,7 +148,7 @@ function EmailEditor() {
         }
     };
     
-    /** Выполнить команду отправи соббщения */
+    /** Выполнить команду отправить собщение */
     const sendEmail = () => {
         alert('Email sent: ' + text);
     };
@@ -156,6 +156,7 @@ function EmailEditor() {
     return (
         <div>
             <h1>E-mail editor</h1>
+            <div className={styles.preview} dangerouslySetInnerHTML={{ __html: text }}></div>
             <div className={styles.card}>
                 <div 
                     ref={editorRef}
@@ -174,6 +175,8 @@ function EmailEditor() {
                     <button onClick={sendEmail}>Send now</button>
                 </div>
             </div>
+
+            
             {/**<div className={styles.card}>components/EmailEditor.tsx</div>*/}
         </div>
     )
