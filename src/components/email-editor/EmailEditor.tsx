@@ -109,7 +109,7 @@ function EmailEditor() {
                     parentElement = parentElement.parentElement;
                 }
                 
-                // Check if any parent element has the specified tag
+                // Check if any parent element has the specified tag (see `validTags`)
                 let elementToRemove = null;
                 let currentElement: HTMLElement | null = parentElement as HTMLElement;
                 while (currentElement && currentElement !== editorRef.current) {
