@@ -2,6 +2,28 @@
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
+## Getting Started
+
+To run the application in development mode:
+
+```bash
+npm run dev
+```
+
+This command will start both:
+1. The Vite development server (http://localhost:5173)
+2. The JSON Server API (http://localhost:3000)
+
+The application requires both servers to be running to function properly.
+
+## Available Scripts
+
+- `npm run dev` - Starts both the development server and JSON Server API
+- `npm run server` - Starts only the JSON Server API on port 3000
+- `npm run build` - Builds the app for production
+- `npm run lint` - Runs ESLint
+- `npm run preview` - Previews the production build
+
 Currently, two official plugins are available:
 
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
