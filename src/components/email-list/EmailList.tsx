@@ -2,7 +2,9 @@ import styles from './EmailList.module.scss'
 
 function EmaiList() {
     return (
-        <div>
+        <div style={{
+        padding: '1rem',
+    }}>
             
             <h1>E-mail list</h1>
             <div className={styles.list}>

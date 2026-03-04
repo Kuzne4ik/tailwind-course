@@ -154,7 +154,9 @@ function EmailEditor() {
     };
     
     return (
-        <div>
+        <div style={{
+        padding: '1rem',
+    }}>
             <h1>E-mail editor</h1>
             <div className={styles.preview} dangerouslySetInnerHTML={{ __html: text }}></div>
             <div className={styles.card}>
