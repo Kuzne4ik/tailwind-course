@@ -4,7 +4,8 @@ import './index.scss'
 //import { AuthProvider } from './AuthProvider.tsx'
 //import { createBrowserRouter } from "react-router";
 //import { RouterProvider } from "react-router/dom";
-import Home from './Home.tsx'
+import Home from './pages/home/Home.tsx'
+import { Provider } from './provider.tsx'
 
 /*
 const router = createBrowserRouter([
@@ -24,6 +25,8 @@ const root = document.getElementById('root')
 
 createRoot(root!).render(
   <StrictMode>
-    <Home />
+    <Provider>
+      <Home />
+    </Provider>
   </StrictMode>,
 )

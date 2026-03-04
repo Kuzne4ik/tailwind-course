@@ -1,5 +1,5 @@
-import EmailEditor from "./components/email-editor/EmailEditor";
-import EmailList from "./components/email-list/EmailList";
+import EmailEditor from "../../components/email-editor/EmailEditor";
+import EmailList from "../../components/email-list/EmailList";
 
 
 function Home(){

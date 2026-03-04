@@ -1,6 +1,15 @@
+import { emailService } from '../../services/email.service';
+import { useQuery } from '@tanstack/react-query';
 import styles from './EmailList.module.scss'
 
-function EmaiList() {
+function EmailList() {
+
+    const {data} = useQuery({
+        queryKey: ['email messages'],
+        queryFn: () => emailService.getMessages()
+    });
+
+
     return (
         <div style={{
         padding: '1rem',
@@ -8,13 +17,19 @@ function EmaiList() {
             
             <h1>E-mail list</h1>
             <div className={styles.list}>
-                <div>Message 1</div>
-                <div>Message 2</div>
-                <div>Message 3</div>
+                {data ? data.map((message, index) => (
+                    <div id={"message:" + message.id} key={index}>{
+                        "ID:" + message.id + " " + message.subject}</div>
+                )) 
+                : (
+                    <>
+                        <div>Erorr in request please check DB</div>
+                    </>
+                )}
             </div>
             {/**<div>components/EmailList.tsx</div>*/}
         </div>
     )
 }
 
-export default EmaiList
+export default EmailList
