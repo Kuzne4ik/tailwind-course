@@ -75,7 +75,7 @@ function EmailEditor() {
     };
     
     /** Выполнить команду форматирование текста */
-    const formatText = (command: string) => {
+    const formatText = (tagName: string) => {
         // Какой элемент выделен
         const selection = window.getSelection();
         if (selection && selection.rangeCount > 0) {
@@ -83,21 +83,7 @@ function EmailEditor() {
             const selectedText = range.toString();
             
             if (selectedText.length > 0) {
-                let element;
-                
-                switch (command) {
-                    case 'bold':
-                        element = document.createElement('strong');
-                        break;
-                    case 'italic':
-                        element = document.createElement('em');
-                        break;
-                    case 'underline':
-                        element = document.createElement('u');
-                        break;
-                    default:
-                        return;
-                }
+                const element = document.createElement(tagName);
                 
                 try {
                     range.surroundContents(element);
@@ -133,9 +119,9 @@ function EmailEditor() {
                 <div className={styles.actions}>
                     <div className={styles.tools}>
                         <button onClick={clearText}><LucideEraser size={17}/></button>
-                        <button onClick={() => formatText('bold')}><LucideBold size={17}/></button>
-                        <button onClick={() => formatText('italic')}><LucideItalic size={17}/></button>
-                        <button onClick={() => formatText('underline')}><LucideUnderline size={17}/></button>
+                        <button onClick={() => formatText('strong')}><LucideBold size={17}/></button>
+                        <button onClick={() => formatText('em')}><LucideItalic size={17}/></button>
+                        <button onClick={() => formatText('u')}><LucideUnderline size={17}/></button>
                     </div>
                     <button onClick={sendEmail}>Send now</button>
                 </div>
