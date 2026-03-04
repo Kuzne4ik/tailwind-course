@@ -11,10 +11,58 @@ function EmailEditor() {
     /** Ссылка на поле ввода */
     const editorRef = useRef<HTMLDivElement>(null);
     
-    /** перхват события ввода с клавиатуры */
+    /** Выполнить команду ввод текста  */
     const handleInputChange = () => {
         if (editorRef.current) {
+            // Save cursor position
+            const selection = window.getSelection();
+            // Cursor postion in text 
+            let cursorPosition = 0;
+            
+            if (selection && selection.rangeCount > 0) {
+                const range = selection.getRangeAt(0);
+                const preCaretRange = range.cloneRange();
+                preCaretRange.selectNodeContents(editorRef.current);
+                preCaretRange.setEnd(range.endContainer, range.endOffset);
+                cursorPosition = preCaretRange.toString().length;
+            }
+            
             setText(editorRef.current.innerHTML);
+            
+            // Restore cursor position after React re-render
+            setTimeout(() => {
+                if (editorRef.current && cursorPosition > 0) {
+                    const range = document.createRange();
+                    const selection = window.getSelection();
+                    
+                    const walker = document.createTreeWalker(
+                        editorRef.current,
+                        NodeFilter.SHOW_TEXT,
+                        null
+                    );
+                    
+                    let currentPos = 0;
+                    let foundNode = null;
+                    let offset = 0;
+                    
+                    while (walker.nextNode()) {
+                        const nodeLength = walker.currentNode.textContent?.length || 0;
+                        if (currentPos + nodeLength >= cursorPosition) {
+                            foundNode = walker.currentNode;
+                            offset = cursorPosition - currentPos;
+                            break;
+                        }
+                        currentPos += nodeLength;
+                    }
+                    
+                    if (foundNode && selection) {
+                        range.setStart(foundNode, offset);
+                        range.collapse(true);
+                        selection.removeAllRanges();
+                        selection.addRange(range);
+                    }
+                }
+            }, 0);
         }
     };
     
@@ -27,9 +75,43 @@ function EmailEditor() {
     };
     
     /** Выполнить команду форматирование текста */
-    const formatText = (command: string, value?: string) => {
-        document.execCommand(command, false, value);
-        handleInputChange();
+    const formatText = (command: string) => {
+        // Какой элемент выделен
+        const selection = window.getSelection();
+        if (selection && selection.rangeCount > 0) {
+            const range = selection.getRangeAt(0);
+            const selectedText = range.toString();
+            
+            if (selectedText.length > 0) {
+                let element;
+                
+                switch (command) {
+                    case 'bold':
+                        element = document.createElement('strong');
+                        break;
+                    case 'italic':
+                        element = document.createElement('em');
+                        break;
+                    case 'underline':
+                        element = document.createElement('u');
+                        break;
+                    default:
+                        return;
+                }
+                
+                try {
+                    range.surroundContents(element);
+                    
+                    // Update the text state without losing cursor position
+                    if (editorRef.current) {
+                        setText(editorRef.current.innerHTML);
+                    }
+                } catch (error) {
+                    // Fallback for complex selections
+                    console.error('Could not format text:', error);
+                }
+            }
+        }
     };
     
     /** Выполнить команду отправи соббщения */
@@ -43,8 +125,8 @@ function EmailEditor() {
             <div className={styles.card}>
                 <div 
                     ref={editorRef}
-                    contentEditable
                     className={styles.editor}
+                    contentEditable
                     onInput={handleInputChange}
                     dangerouslySetInnerHTML={{ __html: text }}
                 />
