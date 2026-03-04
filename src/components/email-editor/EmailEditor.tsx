@@ -83,10 +83,38 @@ function EmailEditor() {
             const selectedText = range.toString();
             
             if (selectedText.length > 0) {
-                const element = document.createElement(tagName);
+                // Check if the selection is already wrapped in the specified tag
+                let parentElement = range.commonAncestorContainer;
+                if (parentElement.nodeType === Node.TEXT_NODE && parentElement.parentElement) {
+                    parentElement = parentElement.parentElement;
+                }
+                
+                // Check if any parent element has the specified tag
+                let elementToRemove = null;
+                let currentElement: HTMLElement | null = parentElement as HTMLElement;
+                while (currentElement && currentElement !== editorRef.current) {
+                    if (currentElement.tagName && currentElement.tagName.toLowerCase() === tagName.toLowerCase()) {
+                        elementToRemove = currentElement;
+                        break;
+                    }
+                    currentElement = currentElement.parentElement;
+                }
                 
                 try {
-                    range.surroundContents(element);
+                    if (elementToRemove) {
+                        // Remove formatting: unwrap the content
+                        const parent = elementToRemove.parentNode;
+                        if (parent) {
+                            while (elementToRemove.firstChild) {
+                                parent.insertBefore(elementToRemove.firstChild, elementToRemove);
+                            }
+                            parent.removeChild(elementToRemove);
+                        }
+                    } else {
+                        // Add formatting: wrap the content
+                        const element = document.createElement(tagName);
+                        range.surroundContents(element);
+                    }
                     
                     // Update the text state without losing cursor position
                     if (editorRef.current) {
