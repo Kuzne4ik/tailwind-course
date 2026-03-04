@@ -76,6 +76,26 @@ function EmailEditor() {
     
     /** Выполнить команду форматирование текста */
     const formatText = (tagName: string) => {
+        // Validate tagName
+        const validTags = [
+            'strong', // Bold text
+            'em',     // Italic text
+            'u',      // Underlined text
+            's',      // Strikethrough text
+            'mark',   // Highlighted text
+            'small',  // Smaller text
+            'sub',    // Subscript
+            'sup',    // Superscript
+            'code',   // Code formatting
+            'pre',    // Preformatted text
+            'blockquote', // Block quotation
+            'h1', 'h2', 'h3', 'h4', 'h5', 'h6' // Headings
+        ];
+        if (!validTags.includes(tagName)) {
+            console.error(`Invalid tagName: ${tagName}. Must be one of: ${validTags.join(', ')}`);
+            return;
+        }
+        
         // Какой элемент выделен
         const selection = window.getSelection();
         if (selection && selection.rangeCount > 0) {
