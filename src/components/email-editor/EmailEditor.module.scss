@@ -3,9 +3,18 @@
   padding: 0.5rem;
 }
 
-.card {
+.inputblock{
+  padding-right: 1.2rem;
+  margin-bottom: 1rem;
 
-  
+  >input{
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #2e2e2e;
+  }
+}
+
+.card {
   border-radius: 10px;
   overflow: hidden;
   border: 1px solid #2e2e2e;
@@ -42,6 +51,7 @@
     }
 
     > button {
+      margin: 0.5rem;
       border-radius: 8px;
       border: 1px solid transparent;
       padding: 0.6em 1.2em;

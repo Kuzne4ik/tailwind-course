@@ -1,6 +1,20 @@
 {
   "messages": [
-    { "id": "1", "subject": "title 1", "text": "a title" },
-    { "id": "2", "subject": "title 2", "text": "a title"}
-  ]
+    {
+      "id": "1",
+      "subject": "title 1",
+      "text": "a title"
+    },
+    {
+      "id": "2",
+      "subject": "title 2",
+      "text": "a title"
+    },
+    {
+      "id": "a3f7",
+      "subject": "куаук",
+      "text": "ававыаы"
+    }
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }

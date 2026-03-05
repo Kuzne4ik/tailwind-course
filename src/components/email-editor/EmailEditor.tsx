@@ -1,12 +1,34 @@
 import { LucideBold, LucideEraser, LucideItalic, LucideUnderline } from 'lucide-react'
 import styles from './EmailEditor.module.scss'
 import { useState, useRef} from 'react'
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { emailService } from '../../services/email.service';
 
 function EmailEditor() {
-    const [text, setText] = useState(`Hello, Lorem ipsum dolor sit amet consectetur adipisicing elit. 
-                    Quisquam doloremque architecto ducimus quos ut distinctio accusamus molestias
-                     sint inventore deleniti atque quia deserunt aliquid, 
-                     numquam quod impedit perspiciatis eligendi earum.`);
+    const [text, setText] = useState(``);
+    const [subject, setSubject] = useState('');
+
+    // Invalidate the email list query to refresh the data
+    const queryClient = useQueryClient();
+
+    /** Обработка отправки пимсьма */
+    const sendEmailMutation = useMutation({
+        mutationKey: ['send email message'],
+        mutationFn: () => emailService.sendEmail(subject, text),
+        onSuccess: () => {
+            alert('Email sent successfully!');
+            setSubject('');
+            setText('');
+            if (editorRef.current) {
+                editorRef.current.innerHTML = '';
+            }
+            // Invalidate the email list query to refresh the data
+            queryClient.invalidateQueries({ queryKey: ['email messages'] });
+        },
+        onError: (error) => {
+            alert('Failed to send email: ' + error.message);
+        }
+    });
     
     /** Ссылка на поле ввода */
     const editorRef = useRef<HTMLDivElement>(null);
@@ -69,6 +91,7 @@ function EmailEditor() {
     /** Выполнить команду очистик поля ввода*/
     const clearText = () => {
         setText('');
+        setSubject('');
         if (editorRef.current) {
             editorRef.current.innerHTML = '';
         }
@@ -150,15 +173,31 @@ function EmailEditor() {
     
     /** Выполнить команду отправить собщение */
     const sendEmail = () => {
-        alert('Email sent: ' + text);
+        if (!subject.trim()) {
+            alert('Please enter a subject');
+            return;
+        }
+        if (!text.trim()) {
+            alert('Please enter a message');
+            return;
+        }
+        sendEmailMutation.mutate();
     };
     
     return (
-        <div style={{
-        padding: '1rem',
-    }}>
+        <div style={{        padding: '1rem'    }}>
             <h1>E-mail editor</h1>
-            <div className={styles.preview} dangerouslySetInnerHTML={{ __html: text }}></div>
+            <div className={styles.inputblock}>
+                    <label htmlFor="subject" style={{ display: 'block', marginBottom: '0.5rem' }}>Subject:</label>
+                    <input
+                        id="subject"
+                        type="text"
+                        value={subject}
+                        onChange={(e) => setSubject(e.target.value)}
+                        placeholder="Enter email subject"
+
+                    />
+            </div>
             <div className={styles.card}>
                 <div 
                     ref={editorRef}
@@ -174,7 +213,12 @@ function EmailEditor() {
                         <button onClick={() => formatText('em')}><LucideItalic size={17}/></button>
                         <button onClick={() => formatText('u')}><LucideUnderline size={17}/></button>
                     </div>
-                    <button onClick={sendEmail}>Send now</button>
+                    <button 
+                        onClick={sendEmail}
+                        disabled={sendEmailMutation.isPending}
+                    >
+                        {sendEmailMutation.isPending ? 'Sending...' : 'Send'}
+                    </button>
                 </div>
             </div>
 
